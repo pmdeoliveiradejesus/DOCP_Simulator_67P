@@ -71,7 +71,7 @@ fprintf(', 100%%\n')
 end 
 %x= 0.5; %with neval=1  x can be located in any place 0<x<1 (Optional)
 x=k/(neval+1);%Uniform distributed faults, if neval=1000 x goes from 0.001 to 0.999 
-[S,Case,casestudy,nlf,Co,Tix,Tq,index]=run_process(x,ncase,reply2);%Runs the classification script
+[S,Case,casestudy,nlf,Co,Tix,Tq,index]=run_classification(x,ncase,reply2);%Runs the classification script
 
 Case0=Case0+Case;%All 16 pair types classified are aggregated here
 T=unique(vertcat(unique([Tix';Tq']),T));%All nr primary times are aggregated here
