@@ -16,6 +16,10 @@ switch ncase
     case 7
         case_eightbus_Sorrentino_LPSI; casestudy=' Sorrentino_LPSI et al';
     case 8
+        case_eightbus_Sorrentino_LPVI; casestudy=' Sorrentino_LPVI et al';
+     case 9
+        case_eightbus_Sorrentino_LPEI; casestudy=' Sorrentino_LPEI et al';
+    case 10 
         case_eightbus_Oliveira_LP; casestudy='Oliveira et al';
     otherwise
         case_eightbus_Sorrentino_LPSI; casestudy=' Sorrentino_LPSI et al';
@@ -101,14 +105,13 @@ iter=iter+1;
 end
 end
 end%C2 indicates tripping sequence qp
-%% Separation times                       N 
+%% Separation times                        
 for g=1:length(C2(:,1))
 if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) < qmax &...%period 1: no reverse current relay p 
         beta(C2(g,1),C2(g,3)) > 0 %period 1: no loss of sensitivity relay p  
 flag=flag+1; 
 fl(1)=fl(1)+1; 
 S(flag)=beta(C2(g,1),C2(g,3))*D(C2(g,1))-beta(C2(g,2),C2(g,3))*D(C2(g,2));
-Tp(flag)=beta(C2(g,1),C2(g,3))*D(C2(g,1));
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
 end% Type 1  - Case 1  
@@ -122,6 +125,22 @@ if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no 
 flag=flag+1; 
 fl(2)=fl(2)+1;
 S(flag)=betap(C1(g,1),C1(g,3))*D(C1(g,1))-betap(C1(g,2),C1(g,3))*D(C1(g,2))-gammap(C1(g,4),C1(g,1),C1(g,2),C1(g,3))*D(C1(g,4));
+% betap(C1(g,1),C1(g,3)) 
+% betap(C1(g,2),C1(g,3))
+% gammap(C1(g,4),C1(g,1),C1(g,2),C1(g,3))
+% D(C1(g,1))
+% D(C1(g,2))
+% D(C1(g,4))
+% % C1(g,1)
+% % C1(g,3)
+% % C1(g,2) 
+% % C1(g,3)
+% % % C1(g,4) 
+% % % C1(g,1)
+% % % C1(g,2)
+% % % C1(g,3)
+% % % 
+%  pause
 Tj=beta(C1(g,1),C1(g,3))*D(C1(g,1));
 Ti=beta(C1(g,2),C1(g,3))*D(C1(g,2));
 Tqq=beta(C1(g,4),C1(g,3))*D(C1(g,4));
@@ -306,8 +325,7 @@ if    beta(C1(g,2),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay i
  end
 end% Type 6e - Case 14   
 for g=1:length(C1(:,1))
-if beta(C1(g,1),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay j
-   betap(C1(g,1),C1(g,3)) < 0  %period 2: yes loss of sensitivity relay j
+if  betap(C1(g,1),C1(g,3)) < 0  %period 2: yes loss of sensitivity relay j
 fl(15)=fl(15)+1; 
 end
 end% Type 6f - Case 15  

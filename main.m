@@ -31,8 +31,10 @@ addpath('./data/')
 % 4: Mahari	
 % 5: Alipour
 % 6: Meskin	
-% 7: Sorrentino
-% 8: De Oliveira
+% 7: Sorrentino SI
+% 8: Sorrentino VI
+% 9: Sorrentino EI
+% 10: De Oliveira
 ncase=7;% Case number selected
 disp('Available study cases:')
 disp('1: Ezzeddine/Urdaneta')
@@ -41,7 +43,10 @@ disp('3: Ezzeddine')
 disp('4: Mahari')
 disp('5: Alipour')
 disp('6: Meskin')
-disp('7: Sorrentino') 
+disp('7: Sorrentino SI') 
+disp('8: Sorrentino VI') 
+disp('9: Sorrentino EI') 
+disp('10:Oliveira') 
 reply = input('Please select the case number from the list 1-8 [7]: ');
 if isempty(reply)
           ncase = 7;
@@ -78,6 +83,10 @@ T=unique(vertcat(unique([Tix';Tq']),T));%All nr primary times are aggregated her
 sizeS(k)=length(S);%Set length of each separation vector
 for k=1:length(S)
 SepTime(iter)=S(k);
+%   if S(k) < 0.2705896067989
+%       k
+%       x
+%   end
    iter=iter+1;
     end%All calculated separation times are aggregated here
 end 
@@ -99,8 +108,9 @@ result(6,1)= Case0(10)+Case0(11)+Case0(12)+Case0(13)+Case0(14)+Case0(15)+Case0(1
 Nf=result(1,1)+result(2,1)+result(3,1)+result(4,1)+result(5,1);% Number of calculable sep time backup-main relay pair  
 Nnf=result(6,1);% Number of Non-Feasible relay pairs 
 N=Nf+Nnf;% Total pairs
-Nsen=Case0(1)+Case0(2);% Pairs with no loss of sensitivity
-Nnosen=N-Nsen;% Pairs with loss of sensitivity
+Nnosen=Case0(3)+Case0(15)+Case0(12);
+%Nsen=Case0(1)+Case0(2);% Pairs with no loss of sensitivity
+%N-Nsen;% Pairs with loss of sensitivity
 Nnosel=ki;% Pairs with loss of selectivity
 %% Performance indexes
 % selectivity
@@ -109,7 +119,7 @@ minSepTime=(min(SepTime));%Minimum separation time (seconds)
 meanSepTime=mean(SepTime);%Mean Separation Time (seconds)
 devSepTime=std(SepTime);%Std. Dev. Separation Time (seconds)
 % sensitivity
-sen=100*(1-Nnosen/(N));%sensitivity level index
+sen=100*(1-Nnosen/(N/2));%sensitivity level index
 % speed
 T(T==0) = [];
 meanPrimTime=mean(T);% Average primary operation time (seconds)
@@ -125,16 +135,16 @@ fprintf('Number of fauls per line %d\n',neval)
 fprintf('Simulated primary-backup pairs %d\n',(N))
 fprintf('___________________________________________________________________________________\n');
 fprintf('Relay response classification:\n');
-fprintf('Type 1 Normal operation pairs j-i  :  %4d,  %4.1f %%\n',result(1,1), 100*result(1,1)/(N));
-fprintf('Type 2 Normal operation pairs p-q  :  %4d,  %4.1f %%\n',result(2,1), 100*result(2,1)/(N));
+fprintf('Type 1 Normal operation pairs p-q  :  %4d,  %4.1f %%\n',result(1,1), 100*result(1,1)/(N));
+fprintf('Type 2 Normal operation pairs j-i  :  %4d,  %4.1f %%\n',result(2,1), 100*result(2,1)/(N));
 fprintf('Type 3 Partial operation relay  j  :  %4d,  %4.1f %%\n',result(3,1), 100*result(3,1)/(N));
 fprintf('Type 4 Partial operation relay  i  :  %4d,  %4.1f %%\n',result(4,1), 100*result(4,1)/(N));
 fprintf('Type 5 Partial operation relays j-i:  %4d,  %4.1f %%\n',result(5,1), 100*result(5,1)/(N));
 fprintf('Type 6 No operation                :  %4d,  %4.1f %%\n',result(6,1), 100*result(6,1)/(N));
 fprintf('___________________________________________________________________________________\n');
-fprintf('Feasible back-main pairs (there is a calculated separation time) :  %4d,  %4.1f %%\n',Nf, 100*Nf/(N));
-fprintf('Non Feasible back-main pairs (there is no separation time S)     :  %4d,  %4.1f %%\n',Nnf, 100*Nnf/(N));
-fprintf('Relay pairs without loss of sensitivity                          :  %4d,  %4.1f %%\n',Nsen, sen);
+fprintf('Back-main pairs with calculated separation time                  :  %4d,  %4.1f %%\n',Nf, 100*Nf/(N));
+fprintf('Back-main pairs where no separation time can be calculated       :  %4d,  %4.1f %%\n',Nnf, 100*Nnf/(N));
+fprintf('Backup relays with no loss of sensitivity                           :  %4d,  %4.1f %%\n',N/2-Nnosen, sen);
 fprintf('Mean   Operation Times calc with specified TDSs and Ips          : %7.4f (ms)\n',meanPrimTime*1000)
 fprintf('StdDev Operation Times calc with specified TDSs and IPs          : %7.4f (ms)\n',devPrimTime*1000)
 fprintf('Verifying if minimum calculated separation time %5.4f is higher than the coordination time C=%7.4f\n',minSepTime,Co) 
@@ -167,3 +177,4 @@ res(9,1)=meanSepTime*1000;%ms
 res(10,1)=minSepTime*1000;%ms
 res(11,1)=elapsedtime000;% CPU time
 Case0=Case0';
+ 
