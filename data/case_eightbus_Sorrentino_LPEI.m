@@ -27,17 +27,31 @@
 %                   ----- N15
 %                     |
 %                     G2
+% lines K k=1,2,3,4,5,6,7
+% nodes B b=1,...,14
 % relays R i=1,2,3,4,5,6,7,8,9,10,11,12,13,14
-% lines L k=1,2,3,4,5,6,7
-% nodes N j=1,2,3,4,5,6,7,8 (1,...,14)
-%         <-back-><-main-><-back-----><---main->
-%      relayi faultk i  k  nsend nrec nsend nrec
-% index=[	5	 1	 1	1	3      6    1	4;
-% 	        4	 1	 2	1	3      5    2   4;
-% 	        1	 2   3	2	1      4    2	5;
-% 	        6	 2	 4	2	1      6    3	5;
-% 	        3	 3	 5	3	2      5    3	6;
-% 	        2	 3	 6	3	2      4    1	6];
+%        Backup	Primary	Backup	Primary		
+%        Ri	Lk	Ri	Lk	Bs	Br	Bs  Br	
+% Index=[11	1	1	1	6	12	1	7	;
+%        14	1	1	1	5	13	1	7	;
+%        1	2	3	2	1	7	2	8	;
+%        3	3	5	3	2	8	3	9	;
+%        5	4	7	4	3	9	4	10	;
+%        7	5	9	5	4	10	5	11	;
+%        13	5	9	5	1	13	5	11	;
+%        9	6	11	6	5	11	6	12	;
+%        2	7	13	7	2	7	1	13	;
+%        11	7	13	7	6	12	1	13	;
+%        4	1	2	1	3	8	2	7	;
+%        6	2	4	2	4	9	3	8	;
+%        8	3	6	3	5	10	4	9	;
+%        10	4	8	4	6	11	5	10	;
+%        13	4	8	4	1	13	5	10	;
+%        12	5	10	5	1	12	6	11	;
+%        2	6	12	6	2	7	1	12	;
+%        14	6	12	6	5	13	1	12	;
+%        7	7	14	7	4	10	5	13	;
+%        10	7	14	7	6	11	5	13	];
 global Dmin Co  nr bdat ldat k1 k2 k3 Ip Sbase Vbase Zbase Ibase neval econv itermax tdat nlf  
 %% Relay data %%%%%%
 % Linear solution (No transient network configurations)
