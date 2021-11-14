@@ -51,7 +51,7 @@ Tix=zeros(1,length(index(:,1)));
 Tq=zeros(1,length(index(:,1)));
 for k=1:length(index(:,1))
  if   beta(index(k,22),index(k,4))*D(index(k,22)) > 0
- if  beta(index(k,3),index(k,4))*D(index(k,3)) > beta(index(k,22),index(k,4))*D(index(k,22)) %Who trip first
+ if  beta(index(k,3),index(k,4))*D(index(k,3)) > beta(index(k,22),index(k,4))*D(index(k,22)) %Who trips first
  q(k)=index(k,22);
  i(k)=index(k,3);
  J=find(index(:,22)==q(k));
@@ -86,25 +86,32 @@ iter=1;
 for h=1:nlf
 for m=2:3
 if  Bd(m,h) > 0 
-C1(iter,1)=Bd(m,h);
-C1(iter,2)=Bd(1,h);
-C1(iter,3)=h;
-C1(iter,4)=Bi(1,h);
+C1(iter,1)=Bd(m,h);% This is j
+C1(iter,2)=Bd(1,h);% This is i
+C1(iter,3)=h;%This is faulted line k
+C1(iter,4)=Bi(1,h); %This is q
+C1(iter,5)=Bi(m,h); %This is p
+if Bi(m,h) == 0
+C1(iter,5)=Bi(m-1,h); %This is p
+end
 iter=iter+1;
 end
 end
-end%C1 indicates tripping sequence ij 
+end%C1 indicates tripping sequence ij and identifies j i q p
 iter=1;
 for h=1:nlf
 for m=2:3
 if  Bi(m,h) > 0 
-C2(iter,1)=Bi(m,h);
-C2(iter,2)=Bi(1,h);
-C2(iter,3)=h;
+C2(iter,1)=Bi(m,h);%This is p
+C2(iter,2)=Bi(1,h);%This is q
+C2(iter,3)=h;%This is faulted line k
+C2(iter,4)=Bd(m,h);% This is j
+C2(iter,5)=Bd(1,h);% This is i
 iter=iter+1;
 end
 end
-end%C2 indicates tripping sequence qp
+end%C2 indicates reverse tripping sequence
+
 %% Separation times                        
 for g=1:length(C2(:,1))
 if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) < qmax &...%period 1: no reverse current relay p 
@@ -114,7 +121,8 @@ fl(1)=fl(1)+1;
 S(flag)=beta(C2(g,1),C2(g,3))*D(C2(g,1))-beta(C2(g,2),C2(g,3))*D(C2(g,2));
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
-end% Type 1  - Case 1  
+end% Type 1  - Case 1  Normal Operation qp
+
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -150,6 +158,7 @@ Tix(flag)=Tqq+Tpi*(1-Tqq/Ti);
 Tjx(flag)=Tqq+Tpj*(1-Tqq/Tj);
 end
 end% Type 2  - Case 2   
+
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j

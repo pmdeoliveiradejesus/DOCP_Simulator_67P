@@ -1,7 +1,7 @@
 % DOCR (67 PHASE) - Directional 67 PHASE Overcurrent Coordination Relays Problem
 % This program simulates the response of the protection system (speed & selectivity) 
 % considering transient configurations
-% Developer:
+% Developer:3
 % Paulo M. De Oliveira, pm.deoliveiradejes@uniandes.edu.co
 % https://power.uniandes.edu.co/
 % Los Andes University
@@ -77,7 +77,6 @@ end
 %x= 0.5; %with neval=1  x can be located in any place 0<x<1 (Optional)
 x=k/(neval+1);%Uniform distributed faults, if neval=1000 x goes from 0.001 to 0.999 
 [S,Case,casestudy,nlf,Co,Tix,Tq,index]=run_classification(x,ncase,reply2);%Runs the classification script
-
 Case0=Case0+Case;%All 16 pair types classified are aggregated here
 T=unique(vertcat(unique([Tix';Tq']),T));%All nr primary times are aggregated here
 sizeS(k)=length(S);%Set length of each separation vector
@@ -108,7 +107,7 @@ result(6,1)= Case0(10)+Case0(11)+Case0(12)+Case0(13)+Case0(14)+Case0(15)+Case0(1
 Nf=result(1,1)+result(2,1)+result(3,1)+result(4,1)+result(5,1);% Number of calculable sep time backup-main relay pair  
 Nnf=result(6,1);% Number of Non-Feasible relay pairs 
 N=Nf+Nnf;% Total pairs
-Nnosen=Case0(3)+Case0(15)+Case0(12);
+Nnosen=Case0(3)+Case0(7)+Case0(15)+Case0(14)+Case0(12);
 %Nsen=Case0(1)+Case0(2);% Pairs with no loss of sensitivity
 %N-Nsen;% Pairs with loss of sensitivity
 Nnosel=ki;% Pairs with loss of selectivity
@@ -144,7 +143,7 @@ fprintf('Type 6 No operation                :  %4d,  %4.1f %%\n',result(6,1), 10
 fprintf('___________________________________________________________________________________\n');
 fprintf('Back-main pairs with calculated separation time                  :  %4d,  %4.1f %%\n',Nf, 100*Nf/(N));
 fprintf('Back-main pairs where no separation time can be calculated       :  %4d,  %4.1f %%\n',Nnf, 100*Nnf/(N));
-fprintf('Backup relays with no loss of sensitivity                           :  %4d,  %4.1f %%\n',N/2-Nnosen, sen);
+fprintf('Backup relays with no loss of sensitivity                        :  %4d,  %4.1f %%\n',N/2-Nnosen, sen);
 fprintf('Mean   Operation Times calc with specified TDSs and Ips          : %7.4f (ms)\n',meanPrimTime*1000)
 fprintf('StdDev Operation Times calc with specified TDSs and IPs          : %7.4f (ms)\n',devPrimTime*1000)
 fprintf('Verifying if minimum calculated separation time %5.4f is higher than the coordination time C=%7.4f\n',minSepTime,Co) 
