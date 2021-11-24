@@ -33,12 +33,12 @@ end
 for k=1:length(index(:,1)) %number of relay pairs
 beta(index(k,3),index(k,4))= index(k,13);  %beta i main first interval due to fault in line k 
 beta(index(k,1),index(k,2))= index(k,14);  %beta j backup first interval due to fault in line k   
-betap(index(k,3),index(k,4))= index(k,15);  %beta i' main transient due to fault in line k when q is open
-betap(index(k,1),index(k,2))= index(k,16);  %beta j' backup transient due to fault in line k when q is open
-theta(index(k,3),index(k,4))= index(k,17);  %beta i main first interval due to fault in line k 
-theta(index(k,1),index(k,2))= index(k,18);  %beta j backup first interval due to fault in line k   
-thetap(index(k,3),index(k,4))= index(k,19);  %beta i' main transient due to fault in line k when q is open
-thetap(index(k,1),index(k,2))= index(k,20);  %beta j' backup transient due to fault in line k when q is open
+betap(index(k,3),index(k,4))= index(k,15); %beta i' main transient due to fault in line k when q is open
+betap(index(k,1),index(k,2))= index(k,16); %beta j' backup transient due to fault in line k when q is open
+theta(index(k,3),index(k,4))= index(k,17); %beta i main first interval due to fault in line k 
+theta(index(k,1),index(k,2))= index(k,18); %beta j backup first interval due to fault in line k   
+thetap(index(k,3),index(k,4))= index(k,19);%beta i' main transient due to fault in line k when q is open
+thetap(index(k,1),index(k,2))= index(k,20);%beta j' backup transient due to fault in line k when q is open
 gammap(index(k,22),index(k,1),index(k,3),index(k,2))= index(k,21);% gamma' q j i k
 gammapp(index(k,22),index(k,1),index(k,3),index(k,2))= index(k,24);% gamma'' q j i k  relay j
 gammappp(index(k,22),index(k,1),index(k,3),index(k,2))= index(k,25);% gamma''' q j i k relaj i
@@ -121,8 +121,7 @@ fl(1)=fl(1)+1;
 S(flag)=beta(C2(g,1),C2(g,3))*D(C2(g,1))-beta(C2(g,2),C2(g,3))*D(C2(g,2));
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
-end% Type 1  - Case 1  Normal Operation qp
-
+end% Type 1  - Case 1 - Normal Operation qp
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -158,7 +157,6 @@ Tix(flag)=Tqq+Tpi*(1-Tqq/Ti);
 Tjx(flag)=Tqq+Tpj*(1-Tqq/Tj);
 end
 end% Type 2  - Case 2   
-
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j

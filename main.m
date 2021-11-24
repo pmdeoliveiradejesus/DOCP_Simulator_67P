@@ -1,16 +1,13 @@
 % DOCR (67 PHASE) - Directional 67 PHASE Overcurrent Coordination Relays Problem
 % This program simulates the response of the protection system (speed & selectivity) 
 % considering transient configurations
-% Developer:3
-% Paulo M. De Oliveira, pm.deoliveiradejes@uniandes.edu.co
-% https://power.uniandes.edu.co/
-% Los Andes University
+% Developer:
+% Paulo M. De Oliveira, pdeoliv@gmail.com
 % First version: November 6, 2020 
 % Documentation:
 % De Oliveira-De Jesus, P.M. and Sorrentino E. 
 % Methodology to assess global performance indexes for sensitivity, selectivity, and speed of directional overcurrent protection systems
 % submitted to Electrical Power Systems Research
-
 clear all
 close all
 clc
@@ -57,12 +54,12 @@ reply2 = input('Do you want to include a prefault power flow? y/n [n]:','s');
 if isempty(reply2)
 reply2 = 'n';
 end         
-neval=1000;% Number of faults per line uniformily distributed
 Case0=zeros(16,1);% Initialize type pairs vector
 T=[0];%Initialize primary times
 i=1;%Initialize flag for time progress
 iter=1;%initialize counter for separation times
 %% Begins Iterative process 
+neval=1000;%number of faults uniformly distributed per each line  
 for k=1:neval  
 i=i+1;
 if i==neval/4
@@ -82,12 +79,8 @@ T=unique(vertcat(unique([Tix';Tq']),T));%All nr primary times are aggregated her
 sizeS(k)=length(S);%Set length of each separation vector
 for k=1:length(S)
 SepTime(iter)=S(k);
-%   if S(k) < 0.2705896067989
-%       k
-%       x
-%   end
-   iter=iter+1;
-    end%All calculated separation times are aggregated here
+iter=iter+1;
+end%All calculated separation times are aggregated here
 end 
 %% Iterative process ends
 elapsedtime000=cputime-time000;% Set simulation time
@@ -107,7 +100,7 @@ result(6,1)= Case0(10)+Case0(11)+Case0(12)+Case0(13)+Case0(14)+Case0(15)+Case0(1
 Nf=result(1,1)+result(2,1)+result(3,1)+result(4,1)+result(5,1);% Number of calculable sep time backup-main relay pair  
 Nnf=result(6,1);% Number of Non-Feasible relay pairs 
 N=Nf+Nnf;% Total pairs
-Nnosen=Case0(3)+Case0(7)+Case0(15)+Case0(14)+Case0(12);
+Nnosen=Case0(3)+Case0(7)+Case0(12)+Case0(15);
 %Nsen=Case0(1)+Case0(2);% Pairs with no loss of sensitivity
 %N-Nsen;% Pairs with loss of sensitivity
 Nnosel=ki;% Pairs with loss of selectivity
@@ -175,5 +168,5 @@ res(8,1)=devPrimTime*1000;%ms
 res(9,1)=meanSepTime*1000;%ms
 res(10,1)=minSepTime*1000;%ms
 res(11,1)=elapsedtime000;% CPU time
-Case0=Case0';
+%Case0=Case0';
  
