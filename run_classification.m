@@ -112,7 +112,10 @@ end
 end
 end%C2 indicates reverse tripping sequence
 
-%% Separation times                        
+% Separation times calculation
+
+%%--------------------------------------------------------- 
+% Type 1  - Case 1 - Normal Operation qp                     
 for g=1:length(C2(:,1))
 if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) < qmax &...%period 1: no reverse current relay p 
         beta(C2(g,1),C2(g,3)) > 0 %period 1: no loss of sensitivity relay p  
@@ -121,7 +124,11 @@ fl(1)=fl(1)+1;
 S(flag)=beta(C2(g,1),C2(g,3))*D(C2(g,1))-beta(C2(g,2),C2(g,3))*D(C2(g,2));
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
-end% Type 1  - Case 1 - Normal Operation qp
+end% End Type 1  - Case 1 - Normal Operation qp:  
+%Relays q and p are sensitive: $\beta_{qkh}>0$,$\beta_{pkh}>0$. There is  no reverse current at relay p: $|\theta'_{pkh}-\theta'_{qkh}|<\phi$  
+
+%%--------------------------------------------------------- 
+% Type 2  - Case 2   - Normal Operation ij 
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -132,22 +139,6 @@ if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no 
 flag=flag+1; 
 fl(2)=fl(2)+1;
 S(flag)=betap(C1(g,1),C1(g,3))*D(C1(g,1))-betap(C1(g,2),C1(g,3))*D(C1(g,2))-gammap(C1(g,4),C1(g,1),C1(g,2),C1(g,3))*D(C1(g,4));
-% betap(C1(g,1),C1(g,3)) 
-% betap(C1(g,2),C1(g,3))
-% gammap(C1(g,4),C1(g,1),C1(g,2),C1(g,3))
-% D(C1(g,1))
-% D(C1(g,2))
-% D(C1(g,4))
-% % C1(g,1)
-% % C1(g,3)
-% % C1(g,2) 
-% % C1(g,3)
-% % % C1(g,4) 
-% % % C1(g,1)
-% % % C1(g,2)
-% % % C1(g,3)
-% % % 
-%  pause
 Tj=beta(C1(g,1),C1(g,3))*D(C1(g,1));
 Ti=beta(C1(g,2),C1(g,3))*D(C1(g,2));
 Tqq=beta(C1(g,4),C1(g,3))*D(C1(g,4));
@@ -156,7 +147,13 @@ Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tix(flag)=Tqq+Tpi*(1-Tqq/Ti);
 Tjx(flag)=Tqq+Tpj*(1-Tqq/Tj);
 end
-end% Type 2  - Case 2   
+end% End of Type 2  - Case 2
+%Normal Operation ij:  
+%Relays i and j are sensitive in both periods: $\beta_{ikh}>0$, $\beta_{jkh}>0$, $\beta'_{ikh}>0$, $\beta'_{jkh}>0$. 
+%There is  no reverse current at relay j in both periods: $|\theta_{jkh}-\theta_{iqkh}|<\phi$ and $|\theta'_{jkh}-\theta'_{ikh}|<\phi$. A separation time can be calculated.
+
+%%--------------------------------------------------------- 
+% Type 3a - Case 3  
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -164,7 +161,6 @@ if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no 
    betap(C1(g,1),C1(g,3)) > 0 &...%period 2: no loss of sensitivity relay j
    beta(C1(g,2),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay i
    betap(C1(g,2),C1(g,3)) > 0%period 2: no loss of sensitivity relay i
-
 flag=flag+1;
 fl(3)=fl(3)+1; 
 S(flag)=betap(C1(g,1),C1(g,3))*D(C1(g,1))-betap(C1(g,2),C1(g,3))*D(C1(g,2))-gammapp(C1(g,4),C1(g,1),C1(g,2),C1(g,3))*D(C1(g,4));
@@ -176,15 +172,23 @@ Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tix(flag)=Tqq+Tpi*(1-Tqq/Ti);
 Tjx(flag)=Tix(flag)+S(flag);
 end
-end% Type 3a - Case 3   
+end% End  Type 3a - Case 3
+% Partial Operation ij:
+% Relay j is not sensitive at period 1: $\beta_{jkh}<0$ 
+% Relay j is sensitive at period 2: $\beta'_{jkh}>0$ 
+% Relay i:is sensitive at both periods $\beta_{ikh}>0$, $\beta'_{ikh}>0$. 
+% There is  no reverse current at relay j in both periods: $|\theta_{jkh}-\theta_{iqkh}|<\phi$ and $|\theta'_{jkh}-\theta'_{ikh}|<\phi$.
+% A separation time can be calculated.
+
+%%---------------------------------------------------------   
+% Type 3b - Case 4
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
    beta(C1(g,1),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay j
    betap(C1(g,1),C1(g,3)) > 0 &...%period 2: no loss of sensitivity relay j
    beta(C1(g,2),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay i
-   betap(C1(g,2),C1(g,3)) > 0 %period 2: no loss of sensitivity relay i
-    
+   betap(C1(g,2),C1(g,3)) > 0 %period 2: no loss of sensitivity relay i   
 flag=flag+1; 
 fl(4)=fl(4)+1; 
 S(flag)=betap(C1(g,1),C1(g,3))*D(C1(g,1))-betap(C1(g,2),C1(g,3))*D(C1(g,2))-gammapp(C1(g,4),C1(g,1),C1(g,2),C1(g,3))*D(C1(g,4));
@@ -195,9 +199,18 @@ Tpj=betap(C1(g,1),C1(g,3))*D(C1(g,1));
 Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tix(flag)=Tqq+Tpi*(1-Tqq/Ti);
 Tjx(flag)=Tix(flag)+S(flag);
- 
 end
-end% Type 3b - Case 4   
+end% End Type 3b - Case 4  
+% Partial Operation ij:
+% Relay j sees a reverse current at period 1: $|\theta_{jkh}-\theta_{ikh}|>phi$
+% Relay j is sensitive at period 1: $\beta_{jkh}>0$ 
+% Relay j is sensitive at period 2: $\beta'_{jkh}>0$ 
+% Relay i: is sensitive at both periods $\beta_{ikh}>0$, $\beta'_{ikh}>0$. 
+% There is  no reverse current at relay j in period 2: $|\theta'_{jkh}-\theta'_{ikh}|<\phi$. 
+% A separation time can be calculated.
+
+%%--------------------------------------------------------- 
+% Type 3c - Case 5  
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -215,7 +228,18 @@ Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tix(flag)=Tqq+Tpi*(1-Tqq/Ti);
 Tjx(flag)=Tix(flag)+S(flag);
 end
-end% Type 3c - Case 5  
+end
+% End 3c - Case 5 
+% Partial Operation ij:
+% Relay j sees a reverse current at period 1: $|\theta_{jkh}-\theta_{iqkh}|>\phi$
+% Relay j is no sensitive at period 1: $\beta_{jkh}<0$ 
+% Relay j is sensitive at period 2: $\beta'_{jkh}>0$ 
+% Relay i: is sensitive at both periods $\beta_{ikh}>0$, $\beta'_{ikh}>0$. 
+% There is  no reverse current at relay j in period 2: $|\theta'_{jkh}-\theta'_{ikh}|<\phi$. 
+% A separation time can be calculated.
+
+%%--------------------------------------------------------- 
+% Type 4  - Case 6  
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -234,7 +258,18 @@ Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tjx(flag)=Tqq+Tpj*(1-Tqq/Tj);
 Tix(flag)=Tjx(flag)-S(flag);
 end
-end% Type 4  - Case 6  
+end
+% End  Type 4  - Case 6 
+% Partial Operation ij:
+% Relay j is sensitive at period 1: $\beta_{jkh}>0$ 
+% Relay j is sensitive at period 2: $\beta'_{jkh}>0$ 
+% Relay i is not sensitive at period 1: $\beta_{ikh}<0$ 
+% Relay i is sensitive at period 2: $\beta'_{ikh}>0$  
+% There is  no reverse current at relay j in both periods: $|\theta_{jkh}-\theta_{iqkh}|<\phi$ and $|\theta'_{jkh}-\theta'_{ikh}|<\phi$.
+% A separation time can be calculated.
+
+%%--------------------------------------------------------- 
+% Type 5a - Case 7
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) < qmax &... %period 1: no reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -252,13 +287,25 @@ Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tix(flag)=Tpi;
 Tjx(flag)=Tpj;
 end
-end% Type 5a - Case 7   
+end 
+% End  Type 5a - Case 7
+% Partial Operation ij:
+% Relay j is not sensitive at period 1: $\beta_{jkh}<0$ 
+% Relay j is sensitive at period 2: $\beta'_{jkh}>0$ 
+% Relay i is not sensitive at period 1: $\beta_{ikh}<0$ 
+% Relay i is sensitive at period 2: $\beta'_{ikh}>0$  
+% There is  no reverse current at relay j period 1: $|\theta_{jkh}-\theta_{iqkh}|<\phi$.
+% There is  no reverse current at relay j period 2: $|\theta'_{jkh}-\theta'_{ikh}|<\phi$.
+% A separation time can be calculated.
+
+%%--------------------------------------------------------- 
+% Type 5b - Case 8
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
    beta(C1(g,1),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay j
    betap(C1(g,1),C1(g,3)) > 0 &...%period 2: no loss of sensitivity relay j
-   beta(C1(g,2),C1(g,3)) < 0 &...%period 1: yrs loss of sensitivity relay i
+   beta(C1(g,2),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay i
    betap(C1(g,2),C1(g,3)) >0  %period 2: no loss of sensitivity relay iif abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &  abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax & beta(C1(g,1),C1(g,3)) > 0 & betap(C1(g,1),C1(g,3)) > 0 & beta(C1(g,2),C1(g,3)) < 0 & betap(C1(g,2),C1(g,3)) > 0  & beta(C1(g,4),C1(g,3))*D(C1(g,4)) 
 flag=flag+1; 
 fl(8)=fl(8)+1; 
@@ -271,7 +318,19 @@ Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tix(flag)=Tpi;
 Tjx(flag)=Tpj;
 end
-end% Type 5b - Case 8   
+end   
+% End  Type 5b - Case 8
+% Partial Operation ij:
+% Relay j is sensitive at period 1: $\beta_{jkh}>0$ 
+% Relay j is sensitive at period 2: $\beta'_{jkh}>0$ 
+% Relay i is not sensitive at period 1: $\beta_{ikh}<0$ 
+% Relay i is sensitive at period 2: $\beta'_{ikh}>0$  
+% There is reverse current at relay j period 1: $|\theta_{jkh}-\theta_{iqkh}|>\phi$.
+% There is  no reverse current at relay j period 2: $|\theta'_{jkh}-\theta'_{ikh}|<\phi$.
+% A separation time can be calculated.
+
+%%--------------------------------------------------------- 
+% Type 5c - Case 9 
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) < qmax &... %period 2: no reverse current relay j
@@ -290,7 +349,19 @@ Tpi=betap(C1(g,2),C1(g,3))*D(C1(g,2));
 Tix(flag)=Tpi;
 Tjx(flag)=Tpj;
 end
-end% Type 5c - Case 9   
+end 
+% End  Type 5c - Case 9
+% Partial Operation ij:
+% Relay j is not sensitive at period 1: $\beta_{jkh}<0$ 
+% Relay j is sensitive at period 2: $\beta'_{jkh}>0$ 
+% Relay i is not sensitive at period 1: $\beta_{ikh}<0$ 
+% Relay i is sensitive at period 2: $\beta'_{ikh}>0$  
+% There is reverse current at relay j period 1: $|\theta_{jkh}-\theta_{iqkh}|>\phi$.
+% There is no reverse current at relay j period 2: $|\theta'_{jkh}-\theta'_{ikh}|<\phi$.
+% A separation time can be calculated.
+
+%--------------------------------------------------------- 
+%% Type 6a - Case 10  
 for g=1:length(C2(:,1))
 if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) > qmax &...period 1:yes reverse current relay p 
    beta(C2(g,1),C2(g,3)) > 0   %period 1: no loss of sensitivity relay p  
@@ -298,7 +369,15 @@ fl(10)=fl(10)+1;
 flag=flag+1; 
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
-end% Type 6a - Case 10  
+end%  
+% End  Type 6a - Case 10 
+% No operation, p does not operate
+% Relay p is sensitive: $\beta_{pkh}>0$ 
+% There is reverse current at relay p: $|\theta_{pkh}-\theta_{qkh}|>\phi$.
+% A separation time can not be calculated.
+
+%%--------------------------------------------------------- 
+% Type 6b - Case 11  
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) > qmax &... %period 2:yes reverse current relay j
@@ -308,7 +387,15 @@ if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes
    betap(C1(g,2),C1(g,3)) > 0 %period 2: no loss of sensitivity relay i
 fl(11)=fl(11)+1; 
 end
-end% Type 6b - Case 11   
+end 
+% End Type 6b - Case 11 
+% No operation, j does not operate
+% There is reverse current at relay j at period 1: $|\theta_{jkh}-\theta_{ikh}|>\phi$.
+% There is reverse current at relay j at period 2: $|\theta'_{jkh}-\theta'_{ikh}|>\phi$.
+% A separation time can not be calculated.
+
+%%--------------------------------------------------------- 
+% Type 6c - Case 12 
 for g=1:length(C2(:,1))
 if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) < qmax &...period 1:no reverse current relay p 
         beta(C2(g,1),C2(g,3)) < 0  %period 1: yes  loss of sensitivity relay p
@@ -316,7 +403,16 @@ fl(12)=fl(12)+1;
 flag=flag+1; 
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
-end% Type 6c - Case 12  
+end 
+% End Type 6c - Case 12
+% No operation, p does not operate
+% Relay p is no sensitive: $\beta_{pkh}<0$ 
+% There is no reverse current at relay p: $|\theta_{pkh}-\theta_{qkh}|<\phi$.
+% A separation time can not be calculated.
+
+
+%%--------------------------------------------------------- 
+% Type 6d - Case 13 
 for g=1:length(C2(:,1))
 if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) > qmax &...period 1:yes reverse current relay p 
         beta(C2(g,1),C2(g,3)) < 0  %period 1: yes  loss of sensitivity relay p
@@ -324,25 +420,58 @@ fl(13)=fl(13)+1;
 flag=flag+1; 
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
-end% Type 6d - Case 13  
+end 
+% End of 6d - Case 13
+% No operation, p does not operate
+% Relay p is no sensitive: $\beta_{pkh}<0$ 
+% There is reverse current at relay p: $|\theta_{pkh}-\theta_{qkh}|>\phi$.
+% A separation time can not be calculated.
+
+
+
+%%--------------------------------------------------------- 
+% Type 6e - Case 14   
 for g=1:length(C1(:,1))
-if    beta(C1(g,2),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay i
-   betap(C1(g,2),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay i
+if    betap(C1(g,2),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay i
+   betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j
  fl(14)=fl(14)+1; 
  end
-end% Type 6e - Case 14   
+end 
+% End of Type 6e - Case 14 
+% No operation, j does not operate
+% Relay i is not sensitive at period 2: $\beta'_{ikh}<0$ 
+% Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
+% A separation time can not be calculated.
+
+
+
+
+%%--------------------------------------------------------- 
+% Type 6f - Case 15 
 for g=1:length(C1(:,1))
 if  betap(C1(g,1),C1(g,3)) < 0  %period 2: yes loss of sensitivity relay j
 fl(15)=fl(15)+1; 
 end
-end% Type 6f - Case 15  
+end
+% End of Type 6f - Case 15  
+% No operation, j does not operate
+% Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
+% A separation time can not be calculated.
+
+
+%%---------------------------------------------------------
+% Type 6g - Case 16  
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
    abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) > qmax %period 2: yes reverse current relay j    
 fl(16)=fl(16)+1; 
 end
-end% Type 6g - Case 16  
- 
+end
+% End of Type 6g - Case 16   
+% No operation, j does not operate
+% Relay j is not sensitive at period 2: $\beta'_{jikh}<0$ 
+% Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
+% A separation time can not be calculated. 
 
 
 
