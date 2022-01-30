@@ -432,14 +432,14 @@ end
 %%--------------------------------------------------------- 
 % Type 6e - Case 14   
 for g=1:length(C1(:,1))
-if    beta(C1(g,1),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay j
+if    beta(C1(g,1),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay j
    betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j
  fl(14)=fl(14)+1; 
  end
 end 
 % End of Type 6e - Case 14 
 % No operation, j does not operate
-% Relay j is not sensitive at period 1: $\beta_{jkh}<0$ 
+% Relay j is sensitive at period 1: $\beta_{jkh}<0$ 
 % Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
 % A separation time can not be calculated.
 
@@ -449,12 +449,14 @@ end
 %%--------------------------------------------------------- 
 % Type 6f - Case 15 
 for g=1:length(C1(:,1))
-if  betap(C1(g,1),C1(g,3)) < 0  %period 2: yes loss of sensitivity relay j
+if    beta(C1(g,1),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay j
+   betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j
 fl(15)=fl(15)+1; 
 end
 end
 % End of Type 6f - Case 15  
 % No operation, j does not operate
+% Relay j is not sensitive at period 1: $\beta_{jkh}<0$ 
 % Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
 % A separation time can not be calculated.
 
