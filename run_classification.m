@@ -432,14 +432,14 @@ end
 %%--------------------------------------------------------- 
 % Type 6e - Case 14   
 for g=1:length(C1(:,1))
-if    betap(C1(g,2),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay i
+if    beta(C1(g,1),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay j
    betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j
  fl(14)=fl(14)+1; 
  end
 end 
 % End of Type 6e - Case 14 
 % No operation, j does not operate
-% Relay i is not sensitive at period 2: $\beta'_{ikh}<0$ 
+% Relay j is not sensitive at period 1: $\beta_{jkh}<0$ 
 % Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
 % A separation time can not be calculated.
 
@@ -463,12 +463,16 @@ end
 % Type 6g - Case 16  
 for g=1:length(C1(:,1))
 if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
-   abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) > qmax %period 2: yes reverse current relay j    
+   abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) > qmax &...%period 2: yes reverse current relay j 
+    beta(C1(g,j),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay j
+   betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j
 fl(16)=fl(16)+1; 
 end
 end
 % End of Type 6g - Case 16   
 % No operation, j does not operate
+% There is reverse current at relay j at period 1: $|\theta_{jkh}-\theta_{ikh}|>\phi$.
+% There is reverse current at relay j at period 2: $|\theta'_{jkh}-\theta'_{ikh}|>\phi$.
 % Relay j is not sensitive at period 2: $\beta'_{jikh}<0$ 
 % Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
 % A separation time can not be calculated. 
