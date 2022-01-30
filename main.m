@@ -54,7 +54,7 @@ reply2 = input('Do you want to include a prefault power flow? y/n [n]:','s');
 if isempty(reply2)
 reply2 = 'n';
 end         
-Case0=zeros(16,1);% Initialize type pairs vector
+Case0=zeros(15,1);% Initialize type pairs vector
 T=[0];%Initialize primary times
 i=1;%Initialize flag for time progress
 iter=1;%initialize counter for separation times
@@ -74,7 +74,7 @@ end
 %x= 0.5; %with neval=1  x can be located in any place 0<x<1 (Optional)
 x=k/(neval+1);%Uniform distributed faults, if neval=1000 x goes from 0.001 to 0.999 
 [S,Case,casestudy,nlf,Co,Tix,Tq,index]=run_classification(x,ncase,reply2);%Runs the classification script
-Case0=Case0+Case;%All 16 pair types classified are aggregated here
+Case0=Case0+Case;%All 15 pair types classified are aggregated here
 T=unique(vertcat(unique([Tix';Tq']),T));%All nr primary times are aggregated here
 sizeS(k)=length(S);%Set length of each separation vector
 for k=1:length(S)
@@ -96,11 +96,11 @@ result(2,1)= Case0(2); %Number of relay pairs Type 2
 result(3,1)= Case0(3)+Case0(4)+Case0(5); %Number of relay pairs Type 3
 result(4,1)= Case0(6); %Number of relay pairs Type 4
 result(5,1)= Case0(7)+Case0(8)+Case0(9); %Number of relay pairs Type 5
-result(6,1)= Case0(10)+Case0(11)+Case0(12)+Case0(13)+Case0(14)+Case0(15)+Case0(16); %Number of relay pairs Type 6 
+result(6,1)= Case0(10)+Case0(11)+Case0(12)+Case0(13)+Case0(14)+Case0(15); %Number of relay pairs Type 6 
 Nf=result(1,1)+result(2,1)+result(3,1)+result(4,1)+result(5,1);% Number of calculable sep time backup-main relay pair  
 Nnf=result(6,1);% Number of Non-Feasible relay pairs 
 N=Nf+Nnf;% Total pairs
-Nnosen=Case0(3)+Case0(7)+Case0(12)+Case0(15);
+Nnosen=Case0(3)+Case0(7)+Case0(12)+Case0(14)+Case0(15);
 %Nsen=Case0(1)+Case0(2);% Pairs with no loss of sensitivity
 %N-Nsen;% Pairs with loss of sensitivity
 Nnosel=ki;% Pairs with loss of selectivity
