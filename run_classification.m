@@ -117,15 +117,16 @@ end%C2 indicates reverse tripping sequence
 %%--------------------------------------------------------- 
 % Type 1  - Case 1 - Normal Operation qp                     
 for g=1:length(C2(:,1))
-if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) < qmax &...%period 1: no reverse current relay p 
-        beta(C2(g,1),C2(g,3)) > 0 %period 1: no loss of sensitivity relay p  
+if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) < qmax &...%period 1: no reverse current relay p  
+        beta(C2(g,1),C2(g,3)) > 0 
+%period 1: no loss of sensitivity relay p  
 flag=flag+1; 
 fl(1)=fl(1)+1; 
 S(flag)=beta(C2(g,1),C2(g,3))*D(C2(g,1))-beta(C2(g,2),C2(g,3))*D(C2(g,2));
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
 end
 end% End Type 1  - Case 1 - Normal Operation qp:  
-%Relays q and p are sensitive: $\beta_{qkh}>0$,$\beta_{pkh}>0$. There is  no reverse current at relay p: $|\theta'_{pkh}-\theta'_{qkh}|<\phi$  
+%Relays q and p are sensitive: $\beta_{qkh}>0$,$\beta_{pkh}>0$. There is no reverse current at relay p: $|\theta'_{pkh}-\theta'_{qkh}|<\phi$  
 
 %%--------------------------------------------------------- 
 % Type 2  - Case 2   - Normal Operation ij 
@@ -363,8 +364,9 @@ end
 %--------------------------------------------------------- 
 %% Type 6a - Case 10  
 for g=1:length(C2(:,1))
-if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) > qmax &...period 1:yes reverse current relay p 
-   beta(C2(g,1),C2(g,3)) > 0   %period 1: no loss of sensitivity relay p  
+if abs(theta(C2(g,1),C2(g,3))-theta(C2(g,2),C2(g,3))) > qmax  &...period 1:yes reverse current relay p 
+        beta(C2(g,1),C2(g,3)) > 0  %period 1: no  loss of sensitivity relay p
+         
 fl(10)=fl(10)+1; 
 flag=flag+1; 
 Tq(flag)=beta(C2(g,2),C2(g,3))*D(C2(g,2));
@@ -372,25 +374,18 @@ end
 end%  
 % End  Type 6a - Case 10 
 % No operation, p does not operate
-% Relay p is sensitive: $\beta_{pkh}>0$ 
 % There is reverse current at relay p: $|\theta_{pkh}-\theta_{qkh}|>\phi$.
 % A separation time can not be calculated.
 
 %%--------------------------------------------------------- 
 % Type 6b - Case 11  
 for g=1:length(C1(:,1))
-if abs(theta(C1(g,1),C1(g,3))-theta(C1(g,2),C1(g,3))) > qmax &... %period 1: yes reverse current relay j
-   abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) > qmax &... %period 2:yes reverse current relay j
-   beta(C1(g,1),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay j
-   betap(C1(g,1),C1(g,3)) > 0 &...%period 2: no loss of sensitivity relay j
-   beta(C1(g,2),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay i
-   betap(C1(g,2),C1(g,3)) > 0 %period 2: no loss of sensitivity relay i
+if abs(thetap(C1(g,1),C1(g,3))-thetap(C1(g,2),C1(g,3))) > qmax %period 2:yes reverse current relay j
 fl(11)=fl(11)+1; 
 end
 end 
 % End Type 6b - Case 11 
 % No operation, j does not operate
-% There is reverse current at relay j at period 1: $|\theta_{jkh}-\theta_{ikh}|>\phi$.
 % There is reverse current at relay j at period 2: $|\theta'_{jkh}-\theta'_{ikh}|>\phi$.
 % A separation time can not be calculated.
 
@@ -426,40 +421,30 @@ end
 % Relay p is no sensitive: $\beta_{pkh}<0$ 
 % There is reverse current at relay p: $|\theta_{pkh}-\theta_{qkh}|>\phi$.
 % A separation time can not be calculated.
-
-
+%%--------------------------------------------------------- 
+% Type 6e - Case 14 
+for g=1:length(C1(:,1))
+if   betap(C1(g,2),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay i
+fl(14)=fl(14)+1; 
+end
+end
+% End of Type 6e - Case 14  
+% No operation, j does not operate
+% Relay i is not sensitive at period 2: $\beta'_{ikh}<0$ 
+% A separation time can not be calculated.
 
 %%--------------------------------------------------------- 
-% Type 6e - Case 14   
+% Type 6f - Case 15   
 for g=1:length(C1(:,1))
-if    beta(C1(g,1),C1(g,3)) > 0 &...%period 1: no loss of sensitivity relay j
-   betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j 
+ if  betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j 
  fl(14)=fl(14)+1; 
  end
 end 
-% End of Type 6e - Case 14 
+% End of Type 6f - Case 15 
 % No operation, j does not operate
-% Relay j is sensitive at period 1: $\beta_{jkh}<0$ 
 % Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
 % A separation time can not be calculated.
 
-
-
-
-
-%%--------------------------------------------------------- 
-% Type 6f - Case 15 
-for g=1:length(C1(:,1))
-if   beta(C1(g,1),C1(g,3)) < 0 &...%period 1: yes loss of sensitivity relay j
-   betap(C1(g,1),C1(g,3)) < 0 %period 2: yes loss of sensitivity relay j
-fl(15)=fl(15)+1; 
-end
-end
-% End of Type 6f - Case 15  
-% No operation, j does not operate
-% Relay j is not sensitive at period 1: $\beta_{jkh}<0$ 
-% Relay j is not sensitive at period 2: $\beta'_{jkh}<0$ 
-% A separation time can not be calculated.
 
 
 
