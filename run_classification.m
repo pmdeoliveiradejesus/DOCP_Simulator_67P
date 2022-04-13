@@ -429,7 +429,7 @@ fl(14)=fl(14)+1;
 end
 end
 % End of Type 6e - Case 14  
-% No operation, j does not operate
+% No operation, i does not operate
 % Relay i is not sensitive at period 2: $\beta'_{ikh}<0$ 
 % A separation time can not be calculated.
 
