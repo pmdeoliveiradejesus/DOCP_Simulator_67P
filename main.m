@@ -43,8 +43,8 @@ disp('6: Meskin')
 disp('7: Sorrentino SI') 
 disp('8: Sorrentino VI') 
 disp('9: Sorrentino EI') 
-disp('10:Oliveira') 
-reply = input('Please select the case number from the list 1-8 [7]: ');
+disp('10:Oliveira (optimized)') 
+reply = input('Please select the case number from the list 1-10 [7]: ');
 if isempty(reply)
           ncase = 7;
 else
@@ -100,7 +100,7 @@ result(6,1)= Case0(10)+Case0(11)+Case0(12)+Case0(13)+Case0(14)+Case0(15); %Numbe
 Nf=result(1,1)+result(2,1)+result(3,1)+result(4,1)+result(5,1);% Number of calculable sep time backup-main relay pair  
 Nnf=result(6,1);% Number of Non-Feasible relay pairs 
 N=Nf+Nnf;% Total pairs
-Nnosen=Case0(3)+Case0(6)+Case0(7)+Case0(12)+Case0(14)+Case0(15);
+Nnosen=Case0(3)+Case0(7)+Case0(12)+Case0(15);
 Nnosel=ki;% Pairs with loss of selectivity
 %% Performance indexes
 % selectivity
@@ -123,6 +123,8 @@ fprintf('Simulation results:\n')
 fprintf('Prefault power flow included?: %s\n',reply2) 
 fprintf('Number of fauls per line %d\n',neval)
 fprintf('Simulated primary-backup pairs %d\n',(N))
+fprintf('Simulated primary relays %d\n',(N))
+fprintf('Simulated backup pairs %d\n',(N))
 fprintf('___________________________________________________________________________________\n');
 fprintf('Relay response classification:\n');
 fprintf('Type 1 Normal operation pairs p-q  :  %4d,  %4.1f %%\n',result(1,1), 100*result(1,1)/(N));
@@ -139,6 +141,13 @@ fprintf('Mean   Operation Times calc with specified TDSs and Ips          : %7.4
 fprintf('StdDev Operation Times calc with specified TDSs and IPs          : %7.4f (ms)\n',devPrimTime*1000)
 fprintf('Verifying if minimum calculated separation time %5.4f is higher than the coordination time C=%7.4f\n',minSepTime,Co) 
 fprintf('Result: %5.4f %% of the faults accomplishes the allowable coordination interval C=%7.4f\n',sel,Co) 
+fprintf('___________________________________________________________________________________\n');
+fprintf('Backup relays with loss of sensitivity                            :  %4d      \n',Nnosen);
+fprintf('Relay pairs with loss of selectivity                              :  %4d      \n',Nnosel);
+fprintf('Sensitivity Index                                                 :  %4.1f %% \n',sen);
+fprintf('Selectivity Index                                                 :  %4.1f %% \n',sel);
+fprintf('Average Speed Index                                              :  %4.3f 1/s\n',inv(meanPrimTime));
+fprintf('___________________________________________________________________________________\n');
 fprintf('Elapsed simulation time: %6.2f s \n',elapsedtime000)
 disp('****************************************************************************************')
 close all
