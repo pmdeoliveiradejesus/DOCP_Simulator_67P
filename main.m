@@ -1,9 +1,10 @@
 % DOCR (67 PHASE) - Directional 67 PHASE Overcurrent Coordination Relays Problem
-% This program simulates the response of the protection system (speed & selectivity) 
+% This program simulates the response of the protection system (speed, sensitivity, & selectivity) 
 % considering transient configurations
 % Developer:
 % Paulo M. De Oliveira, pdeoliv@gmail.com
 % First version: November 6, 2020 
+% Second version: April 15, 2022: relay polarization limits modified 
 % Documentation:
 % De Oliveira-De Jesus, P.M. and Sorrentino E. 
 % Methodology to assess global performance indexes for sensitivity, selectivity, and speed of directional overcurrent protection systems
@@ -59,7 +60,7 @@ T=[0];%Initialize primary times
 i=1;%Initialize flag for time progress
 iter=1;%initialize counter for separation times
 %% Begins Iterative process 
-neval=1000;%number of faults uniformly distributed per each line  
+neval=1000;%number of faults uniformly distributed per each line 
 for k=1:neval  
 i=i+1;
 if i==neval/4
@@ -125,6 +126,7 @@ fprintf('Number of fauls per line %d\n',neval)
 fprintf('Simulated primary-backup pairs %d\n',(N))
 fprintf('Simulated primary relays %d\n',(N))
 fprintf('Simulated backup pairs %d\n',(N))
+fprintf('Relay polarization angle -45 deg  < angle(VI^*)< +135 deg\n')
 fprintf('___________________________________________________________________________________\n');
 fprintf('Relay response classification:\n');
 fprintf('Type 1 Normal operation pairs p-q  :  %4d,  %4.1f %%\n',result(1,1), 100*result(1,1)/(N));

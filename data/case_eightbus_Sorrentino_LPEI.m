@@ -71,7 +71,6 @@ Co=.3;% allowable coordination interval (seconds)
 %k1=13.5;k2=1;k3=-1;
 %Relay curve settings, Extremely Inverse (EI) IEC 60255
 k1=80;k2=2;k3=-1;
-qmax=45; %relay polarization angle (deg) -to detect opposite currents
 %Pickup currents (kA)    
 Ip=[0.5;0.12;0.24;0.12;0.12;0.24;0.12;0.6;0.18;0.12	;0.12;0.18;0.12;0.12];% 
 Dmin=0.1; % minimal dial setting
@@ -82,9 +81,6 @@ dictiorelays=[1 2 3 4 5 6 7 8 9 10 11 12 13 14;
               2 9 3 10 4 11 5 12 6 13 1 8 14 7];  % original case numbering 
 % %Extreme inverse
 D=[0.478000000000000;0.127000000000000;1.136000000000000;1.856000000000000;1.866000000000000;1.052000000000000;0.136000000000000;0.293000000000000;1.641000000000000;0.529000000000000;0.496000000000000;1.656000000000000;1.221000000000000;1.314000000000000];
-%% Simulation/Optimization Data
-lowerbound=.00000001; % from % of the lline
-upperbound=.99999999; % to % of the line 
 %% System Data
 Sbase=150;%MVA
 Vbase=150;%kV

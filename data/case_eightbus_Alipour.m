@@ -69,7 +69,6 @@ Co=.3;% allowable coordination interval (seconds)
  %k1=.14;k2=0.02;k3=-1;
 %Relay curve settings, Very Inverse (VI) IEC 60255
 k1=13.5;k2=1;k3=-1;
-qmax=45; %relay polarization angle (deg) -to detect opposite currents
 %Pickup currents (kA)    
 Ip=[0.235
 0.6
@@ -106,9 +105,6 @@ D=[0.1970
 0.1170
 0.1780
 0.1780];
-%% Simulation/Optimization Data
-lowerbound=.00000001; % from % of the lline
-upperbound=.99999999; % to % of the line
 %% System Data
 Sbase=150;%MVA
 Vbase=150;%kV
