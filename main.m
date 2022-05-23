@@ -1,11 +1,12 @@
-% DOCR (67 PHASE) - Directional 67 PHASE Overcurrent Coordination Relays Problem
+1% DOCR (67 PHASE) - Directional 67 PHASE Overcurrent Coordination Relays Problem
 % This program simulates the response of the protection system (speed, sensitivity, & selectivity) 
 % considering transient configurations
 % Developer:
 % Paulo M. De Oliveira, pdeoliv@gmail.com
 % First version: November 6, 2020 
 % Second version: April 15, 2022: relay polarization limits modified 
-% Documentation:
+% Final version: May 22, 2022: tables according paper final version 
+% Documentat1ion:
 % De Oliveira-De Jesus, P.M. and Sorrentino E. 
 % Methodology to assess global performance indexes for sensitivity, selectivity, and speed of directional overcurrent protection systems
 % submitted to Electrical Power Systems Research
@@ -73,7 +74,7 @@ elseif i==neval
 fprintf(', 100%%\n')
 end 
 %x= 0.5; %with neval=1  x can be located in any place 0<x<1 (Optional)
-x=k/(neval+1);%Uniform distributed faults, if neval=1000 x goes from 0.001 to 0.999 
+x=k/(neval+1);%Uniform distributed faults, if neval=1000 x goes from 0.001 to 0.999 Distance with respect to relay i
 [S,Case,casestudy,nlf,Co,Tix,Tq,index]=run_classification(x,ncase,reply2);%Runs the classification script
 Case0=Case0+Case;%All 15 pair types classified are aggregated here
 T=unique(vertcat(unique([Tix';Tq']),T));%All nr primary times are aggregated here
@@ -107,6 +108,7 @@ Nnosel=ki;% Pairs with loss of selectivity
 % selectivity
 sel=(1-Nnosel/Nf)*100;%selectivity level index
 minSepTime=(min(SepTime));%Minimum separation time (seconds)
+maxSepTime=(max(SepTime));%Minimum separation time (seconds)
 meanSepTime=mean(SepTime);%Mean Separation Time (seconds)
 devSepTime=std(SepTime);%Std. Dev. Separation Time (seconds)
 % sensitivity
@@ -129,18 +131,18 @@ fprintf('Simulated backup pairs %d\n',(N))
 fprintf('Relay polarization angle -45 deg  < angle(VI^*)< +135 deg\n')
 fprintf('___________________________________________________________________________________\n');
 fprintf('Relay response classification:\n');
-fprintf('Type 1 Normal operation pairs p-q  :  %4d,  %4.1f %%\n',result(1,1), 100*result(1,1)/(N));
-fprintf('Type 2 Normal operation pairs j-i  :  %4d,  %4.1f %%\n',result(2,1), 100*result(2,1)/(N));
-fprintf('Type 3 Partial operation relay  j  :  %4d,  %4.1f %%\n',result(3,1), 100*result(3,1)/(N));
-fprintf('Type 4 Partial operation relay  i  :  %4d,  %4.1f %%\n',result(4,1), 100*result(4,1)/(N));
-fprintf('Type 5 Partial operation relays j-i:  %4d,  %4.1f %%\n',result(5,1), 100*result(5,1)/(N));
-fprintf('Type 6 No operation                :  %4d,  %4.1f %%\n',result(6,1), 100*result(6,1)/(N));
+fprintf('Type 1 Normal operation pairs p-q  :  %4d  %4.1f %%\n',result(1,1), 100*result(1,1)/(N));
+fprintf('Type 2 Normal operation pairs j-i  :  %4d  %4.1f %%\n',result(2,1), 100*result(2,1)/(N));
+fprintf('Type 3 Partial operation relay  j  :  %4d  %4.1f %%\n',result(3,1), 100*result(3,1)/(N));
+fprintf('Type 4 Partial operation relay  i  :  %4d  %4.1f %%\n',result(4,1), 100*result(4,1)/(N));
+fprintf('Type 5 Partial operation relays j-i:  %4d  %4.1f %%\n',result(5,1), 100*result(5,1)/(N));
+fprintf('Type 6 No operation                :  %4d  %4.1f %%\n',result(6,1), 100*result(6,1)/(N));
 fprintf('___________________________________________________________________________________\n');
 fprintf('Back-main pairs with calculated separation time                  :  %4d,  %4.1f %%\n',Nf, 100*Nf/(N));
 fprintf('Back-main pairs where no separation time can be calculated       :  %4d,  %4.1f %%\n',Nnf, 100*Nnf/(N));
 fprintf('Backup relays with no loss of sensitivity                        :  %4d,  %4.1f %%\n',N-Nnosen, sen);
-fprintf('Mean   Operation Times calc with specified TDSs and Ips          : %7.4f (ms)\n',meanPrimTime*1000)
-fprintf('StdDev Operation Times calc with specified TDSs and IPs          : %7.4f (ms)\n',devPrimTime*1000)
+fprintf('Mean   Operation Times with specified TDSs and Ips               : %7.4f (ms)\n',meanPrimTime*1000)
+fprintf('StdDev Operation Times with specified TDSs and IPs               : %7.4f (ms)\n',devPrimTime*1000)
 fprintf('Verifying if minimum calculated separation time %5.4f is higher than the coordination time C=%7.4f\n',minSepTime,Co) 
 fprintf('Result: %5.4f %% of the faults accomplishes the allowable coordination interval C=%7.4f\n',sel,Co) 
 fprintf('___________________________________________________________________________________\n');
@@ -176,6 +178,7 @@ res(7,1)=meanPrimTime*1000; %ms
 res(8,1)=devPrimTime*1000;%ms
 res(9,1)=meanSepTime*1000;%ms
 res(10,1)=minSepTime*1000;%ms
-res(11,1)=elapsedtime000;% CPU time
-%Case0=Case0';
+res(11,1)=maxSepTime*1;%s
+res(12,1)=elapsedtime000;% CPU time
+Case0=Case0';
  
