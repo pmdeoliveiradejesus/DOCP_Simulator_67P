@@ -25,8 +25,8 @@ switch ncase
         case_eightbus_Sorrentino_LPSI; casestudy=' Sorrentino_LPSI et al';
 end
 %relay polarization angle (deg) -45 < angle(V.conj(I))<+135 deg -to detect opposite currents
-tmax=-45+360;%fault angle current tripping zone
-tmin=135;%fault angle current tripping zone
+tmax=45+360;%fault angle current tripping zone
+tmin=225;%fault angle current tripping zone
 
 fl=zeros(15,1);flag=0;
 for jj=1:nlf
@@ -35,27 +35,34 @@ end
 [index]=run_shortcircuit(L(1,:),reply2);%Run external short-circuit program 
 
 %%all angles > 0
+% for k=1:length(index(:,1))
+% if index(k,17) > 0
+% index(k,17)= index(k,17)+360;  
+% else
+% index(k,17)= index(k,17)+360; 
+% end
+% if index(k,18) > 0
+% index(k,18)= index(k,18)+360;
+% else
+% index(k,18)= index(k,18)+360;  
+% end
+% if index(k,19) > 0
+% index(k,19)= index(k,19)+360*0;
+% else
+% index(k,19)= index(k,19)+360*0;  
+% end
+% if index(k,20) > 0
+% index(k,20)= index(k,20)+360;
+% else
+% index(k,20)= index(k,20)+360;  
+% end
+% end
+
 for k=1:length(index(:,1))
-if index(k,17) > 0
-index(k,17)= index(k,17);  
-else
-index(k,17)= index(k,17)+360; 
-end
-if index(k,18) > 0
-index(k,18)= index(k,18);
-else
-index(k,18)= index(k,18)+360;  
-end
-if index(k,19) > 0
-index(k,19)= index(k,19);
-else
-index(k,19)= index(k,19)+360;  
-end
-if index(k,20) > 0
-index(k,20)= index(k,20);
-else
-index(k,20)= index(k,20)+360;  
-end
+    index(k,17)= index(k,17)+360;
+    index(k,18)= index(k,18)+360;
+    index(k,19)= index(k,19)+360;
+    index(k,20)= index(k,20)+360;
 end
 
 for k=1:length(index(:,1)) %number of relay pairs
